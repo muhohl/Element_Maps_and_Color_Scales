@@ -1,0 +1,12 @@
+---
+title: "Comparison between different colormaps for element mapping"
+author: "Max Hohl"
+date: "22/10/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
