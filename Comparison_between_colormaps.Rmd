@@ -5,6 +5,7 @@ date: "22/10/2021"
 output:
   bookdown::html_document2:
     toc: yes
+    font_size: 16
     toc_float: no
     df_print: paged
     fig.cation: yes
@@ -19,10 +20,14 @@ knitr::opts_chunk$set(message = FALSE)
 knitr::opts_chunk$set(warning = FALSE)
 ```
 
+I tend to only load the tidyverse packages at the beginning of a notebook.
+Functions from other packages are loaded explicitly. This helps me to remember
+which function is from which package.
 
 ```{r}
 library(tidyverse)
-#library(cowplot)
+# require(cowplot)
+# require(colorblindcheck)
 ```
 
 Install required packages for the this project. `colorspace` and `colorblindr`
@@ -46,22 +51,39 @@ rainbow_palette <- rev(c("#CCCCCC", "#8B0000", "#FF0000", "#FFA500",
 colorblindcheck::palette_check(rainbow_palette, plot = TRUE, )
 ```
 
+The popular Rainbow colormap. Both for Protanopia and Tritanopia black colors
+occur at least twice in each color range.
+
+## Heat
 
 ```{r}
 heat_palette <- rev(c("#FFFF00", "#FFA500", "#FF0000", "#8B0000", "#000000"))
 colorblindcheck::palette_check(heat_palette, plot = TRUE)
 ```
 
+Another common colormap with high values shown visualized as yellow and low
+value as red and the lowest as black. Red and black colors are difficult to
+distinguish for people suffering from Deuteranopia and Protanopia.
+
+
+## Viridis (C)
+
 ```{r}
 colorblindcheck::palette_check(viridis::viridis(11), plot = TRUE)
 ```
 
+Example of the viridis color scale shows clearly distinguishable colors for all
+three types of colorblindess.
 
 # Element Maps
+
+Loading the data frame, containing the image data.
 
 ```{r}
 df_element_map <- read_csv("Image_data.csv")
 ```
+
+## Rainbow Map
 
 ```{r}
 i <- 1
@@ -101,6 +123,8 @@ p.g.rainbow <- cowplot::plot_grid(plotlist = rainbow_element_maps)
 p.g.rainbow
 ```
 
+## Heat Map
+
 ```{r}
 i <- 1
 heat_element_maps <- list()
@@ -138,20 +162,27 @@ p.g.heat <- cowplot::plot_grid(plotlist = heat_element_maps)
 p.g.heat
 ```
 
-```{r}
+## Viridis Map (C)
+
+```{r, fig.width=12, fig.height=7}
 viridis_d_element_maps <- 
     geochem::laser_map(data = df_element_map, 
-                       selected_elements = names(df_element_map[-c(1:2)]))
+                       selected_elements = names(df_element_map[-c(1:2)]),
+                       fontsize = 16)
 cowplot::plot_grid(plotlist = viridis_d_element_maps)
 ```
 
-```{r}
+## Viridis Map (B)
+
+```{r, fig.width=12, fig.height=7}
 viridis_b_element_maps <- 
     geochem::laser_map(data = df_element_map, 
                        selected_elements = names(df_element_map[-c(1:2)]),
-                       option = "B")
+                       option = "B", fontsize = 16)
 cowplot::plot_grid(plotlist = viridis_b_element_maps)
 ```
+
+## Colorblind Rainbow 
 
 ```{r, fig.height=8, fig.width=10}
 cowplot::plot_grid(rainbow_element_maps[[4]],
@@ -159,20 +190,34 @@ cowplot::plot_grid(rainbow_element_maps[[4]],
                    nrow = 2, rel_heights = c(0.33, 0.67))
 ```
 
+
+
 ```{r, fig.height=8, fig.width=10}
-cowplot::plot_grid(heat_element_maps[[4]],
-                   colorblindr::cvd_grid(plot = heat_element_maps[[4]]),
+cowplot::plot_grid(rainbow_element_maps[[5]],
+                   colorblindr::cvd_grid(plot = rainbow_element_maps[[5]]),
+                   nrow = 2, rel_heights = c(0.33, 0.67))
+```
+
+Concentration of As are very low in the core of the pyrite and high in the
+zonation of the rim.
+
+## Colorblind Heat
+
+```{r, fig.height=8, fig.width=10}
+cowplot::plot_grid(heat_element_maps[[5]],
+                   colorblindr::cvd_grid(plot = heat_element_maps[[5]]),
                    nrow = 2, rel_heights = c(0.33, 0.67))
 
 ```
 
 ```{r, fig.height=8, fig.width=10}
-cowplot::plot_grid(viridis_b_element_maps[[4]],
-                   colorblindr::cvd_grid(plot = viridis_b_element_maps[[4]]),
+cowplot::plot_grid(viridis_b_element_maps[[5]],
+                   colorblindr::cvd_grid(plot = viridis_b_element_maps[[5]]),
                    nrow = 2, rel_heights = c(0.33, 0.67)
 )
 ```
 
+## Colorblind Viridis (C)
 ```{r, fig.height=8, fig.width=10}
 cowplot::plot_grid(viridis_d_element_maps[[4]],
                    colorblindr::cvd_grid(plot = viridis_d_element_maps[[4]]),
@@ -180,11 +225,7 @@ cowplot::plot_grid(viridis_d_element_maps[[4]],
                    )
 ```
 
-```{r, fig.height=8, fig.width=10}
-cowplot::plot_grid(rainbow_element_maps[[5]],
-                   colorblindr::cvd_grid(plot = rainbow_element_maps[[5]]),
-                   nrow = 2, rel_heights = c(0.33, 0.67))
-```
+
 
 
 ```{r, fig.height=8, fig.width=10}
