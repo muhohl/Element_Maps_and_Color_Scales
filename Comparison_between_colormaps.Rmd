@@ -180,6 +180,14 @@ viridis_d_element_maps <-
                        selected_elements = names(df_element_map[-c(1:2)]),
                        fontsize = 16)
 cowplot::plot_grid(plotlist = viridis_d_element_maps)
+
+
+#gt <- ggplotGrob(rainbow_element_maps[[1]])
+#leg <- gtable::gtable_filter(gt, "guide-box")
+#leg[[1]][[1]][[1]][[1]][[1]][[2]]$height
+#gt$grobs[[8]][[1]][[1]]$grobs[[5]]$gp$col <- "black"
+#gt$grobs
+
 ```
 
 ## Viridis Map (B)
@@ -190,6 +198,24 @@ viridis_b_element_maps <-
                        selected_elements = names(df_element_map[-c(1:2)]),
                        option = "B", fontsize = 16)
 cowplot::plot_grid(plotlist = viridis_b_element_maps)
+```
+
+## Comparison of Maps
+
+```{r, fig.width = 16, fig.height = 8}
+cowplot::plot_grid(
+   cowplot::plot_grid(plotlist = heat_element_maps[c(2,4:5)],
+                      ncol = 1),
+   cowplot::plot_grid(plotlist = rainbow_element_maps[c(2,4:5)],
+                      ncol = 1),
+   cowplot::plot_grid(plotlist = viridis_d_element_maps[c(2,4:5)],
+                      ncol = 1),
+   cowplot::plot_grid(plotlist = viridis_b_element_maps[c(2,4:5)],
+                      ncol = 1),
+   ncol = 4,
+   labels = c("Heat", "Rainbow", "Viridis (C)", "Viridis (B)")
+   )
+
 ```
 
 ## Colorblind Rainbow 
